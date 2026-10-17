@@ -290,6 +290,34 @@ if (box && loading && label) {
   scene.add(light);
 
   const group = new THREE.Group();
+const organelleLabels = [];
+
+function addOrganelleLabel(name, position) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 64;
+
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 26px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText(name, 128, 42);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  const material = new THREE.SpriteMaterial({
+    map: texture,
+    transparent: true,
+    depthTest: false
+  });
+
+  const sprite = new THREE.Sprite(material);
+  sprite.position.set(...position);
+  sprite.scale.set(1.5, 0.38, 1);
+  sprite.userData.organelleName = name;
+
+  group.add(sprite);
+  organelleLabels.push(sprite);
+}
 group.renderOrder = 1;
   scene.add(group);
 
@@ -311,6 +339,8 @@ group.renderOrder = 1;
   }
 
   function makeCell(type) {
+organelleLabels.length = 0;
+
     while (group.children.length) {
       const obj = group.children[0];
       group.remove(obj);
@@ -333,6 +363,11 @@ group.renderOrder = 1;
       [[-0.9,0.3,1],[0.2,-0.9,0.9],[0.5,0.7,-1.0]]
         .forEach(p => sphere('Mitochondrion','#e98b50',p,[0.3,0.15,0.16]));
 
+addOrganelleLabel('Nucleus', [1.05, 1.15, 0.55]);
+addOrganelleLabel('Vacuole', [-0.15, 1.15, 0]);
+addOrganelleLabel('Chloroplast', [-1, 1.05, 0.6]);
+addOrganelleLabel('Mitochondrion', [0.5, 1.05, -1]);
+
       label.textContent = '🌿 Plant Cell — simplified 3D model';
     } else {
       sphere('Cell membrane','#df75ad',[0,0,0],[1.85,1.55,1.65],true,0.25);
@@ -348,6 +383,12 @@ group.renderOrder = 1;
         .forEach(p => sphere('Small vesicle','#72c9e8',p,[0.2,0.2,0.2]));
 
       sphere('Centrosome','#e7c44b',[0.1,-0.2,0.9],[0.16,0.16,0.16]);
+
+addOrganelleLabel('Nucleus', [0.7, 1.0, 0.4]);
+addOrganelleLabel('Mitochondrion', [-0.8, 0.5, 0.7]);
+addOrganelleLabel('Lysosome', [0.3, -0.8, 0.8]);
+addOrganelleLabel('Cell Membrane', [1.5, 0.9, 0]);
+
       label.textContent = '🐾 Animal Cell — simplified 3D model';
     }
 
