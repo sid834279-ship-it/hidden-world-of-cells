@@ -290,6 +290,7 @@ if (box && loading && label) {
   scene.add(light);
 
   const group = new THREE.Group();
+group.renderOrder = 1;
   scene.add(group);
 
   function sphere(name, color, pos, scale, transparent = false, opacity = 1) {
@@ -318,7 +319,7 @@ if (box && loading && label) {
     }
 
     if (type === 'plant') {
-      sphere('Cell wall', '#57b66b', [0,0,0], [2.1,1.65,1.7]);
+      sphere('Cell wall', '#57b66b', [0,0,0], [2.1,1.65,1.7], true, 0.18);
       sphere('Cell membrane', '#b8f2ce', [0,0,0], [1.96,1.51,1.56], true, 0.55);
       sphere('Cytoplasm', '#e1f8df', [0,0,0], [1.82,1.38,1.43], true, 0.45);
       sphere('Central vacuole', '#66c9ef', [-0.15,0,0], [1.05,0.95,0.9], true, 0.8);
@@ -334,7 +335,7 @@ if (box && loading && label) {
 
       label.textContent = '🌿 Plant Cell — simplified 3D model';
     } else {
-      sphere('Cell membrane','#df75ad',[0,0,0],[1.85,1.55,1.65]);
+      sphere('Cell membrane','#df75ad',[0,0,0],[1.85,1.55,1.65],true,0.25);
       sphere('Cytoplasm','#ffcce6',[0,0,0],[1.72,1.43,1.53],true,0.42);
       sphere('Nucleus','#a875df',[-0.4,0.35,0.25],[0.65,0.65,0.62]);
       sphere('Nucleolus','#65409d',[-0.28,0.42,0.68],[0.22,0.22,0.2]);
