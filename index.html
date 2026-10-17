@@ -231,5 +231,155 @@ showScores();
   <p>School: GBSSS Tukhmirpur No. 1</p>
   <p>The Hidden World of Cells | Biology Project</p>
 </footer>
+
+<section style="padding:20px; text-align:center; background:#22213e; color:white;">
+  <h2>Explore Cells in 3D 🔬</h2>
+  <p>Drag to rotate the model.</p>
+
+  <div id="cell3d-label">3D Cell Model</div>
+
+  <div id="cell3d-loading">Loading 3D model...</div>
+
+  <div id="cell3d-viewer"
+       style="width:100%; height:400px; overflow:hidden; border-radius:12px;">
+  </div>
+
+  <button onclick="show3DCell('plant')">🌿 Plant Cell</button>
+  <button onclick="show3DCell('animal')">🐾 Animal Cell</button>
+</section>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
+const box = document.getElementById('cell3d-viewer');
+const loading = document.getElementById('cell3d-loading');
+const label = document.getElementById('cell3d-label');
+
+if (box && loading && label) {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#22213e');
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(5, 4, 7);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.domElement.style.width = '100%';
+  renderer.domElement.style.height = '100%';
+  renderer.domElement.style.display = 'block';
+  box.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.minDistance = 4;
+  controls.maxDistance = 12;
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x454060, 2));
+  const light = new THREE.DirectionalLight(0xffffff, 3);
+  light.position.set(5, 8, 6);
+  scene.add(light);
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  function sphere(name, color, pos, scale, transparent = false, opacity = 1) {
+    const mesh = new THREE.Mesh(
+      new THREE.SphereGeometry(1, 32, 24),
+      new THREE.MeshPhysicalMaterial({
+        color,
+        roughness: 0.36,
+        transparent,
+        opacity,
+        side: THREE.DoubleSide
+      })
+    );
+    mesh.name = name;
+    mesh.position.set(...pos);
+    mesh.scale.set(...scale);
+    group.add(mesh);
+  }
+
+  function makeCell(type) {
+    while (group.children.length) {
+      const obj = group.children[0];
+      group.remove(obj);
+      obj.geometry.dispose();
+      obj.material.dispose();
+    }
+
+    if (type === 'plant') {
+      sphere('Cell wall', '#57b66b', [0,0,0], [2.1,1.65,1.7]);
+      sphere('Cell membrane', '#b8f2ce', [0,0,0], [1.96,1.51,1.56], true, 0.55);
+      sphere('Cytoplasm', '#e1f8df', [0,0,0], [1.82,1.38,1.43], true, 0.45);
+      sphere('Central vacuole', '#66c9ef', [-0.15,0,0], [1.05,0.95,0.9], true, 0.8);
+      sphere('Nucleus', '#a875df', [1.05,0.65,0.55], [0.48,0.46,0.46]);
+      sphere('Nucleolus', '#65409d', [1.15,0.7,0.87], [0.18,0.18,0.15]);
+
+      [[-1,0.8,0.6],[-1,-0.7,0.6],[-0.7,0.6,-0.9],
+       [0.7,-0.8,-0.7],[0.8,0.9,-0.6],[1.25,-0.4,0.4]]
+        .forEach(p => sphere('Chloroplast','#27965c',p,[0.32,0.18,0.23]));
+
+      [[-0.9,0.3,1],[0.2,-0.9,0.9],[0.5,0.7,-1.0]]
+        .forEach(p => sphere('Mitochondrion','#e98b50',p,[0.3,0.15,0.16]));
+
+      label.textContent = '🌿 Plant Cell — simplified 3D model';
+    } else {
+      sphere('Cell membrane','#df75ad',[0,0,0],[1.85,1.55,1.65]);
+      sphere('Cytoplasm','#ffcce6',[0,0,0],[1.72,1.43,1.53],true,0.42);
+      sphere('Nucleus','#a875df',[-0.4,0.35,0.25],[0.65,0.65,0.62]);
+      sphere('Nucleolus','#65409d',[-0.28,0.42,0.68],[0.22,0.22,0.2]);
+
+      [[0.7,0.7,0.5],[0.8,-0.5,0.6],[-0.9,-0.6,0.3],
+       [0.7,0.3,-0.9],[-0.8,0.7,-0.8]]
+        .forEach(p => sphere('Mitochondrion','#e98b50',p,[0.36,0.2,0.22]));
+
+      [[-1,0,0.8],[0.1,-0.8,-0.9],[1.1,0.3,0.1]]
+        .forEach(p => sphere('Small vesicle','#72c9e8',p,[0.2,0.2,0.2]));
+
+      sphere('Centrosome','#e7c44b',[0.1,-0.2,0.9],[0.16,0.16,0.16]);
+      label.textContent = '🐾 Animal Cell — simplified 3D model';
+    }
+
+    controls.reset();
+    camera.position.set(5,4,7);
+    controls.target.set(0,0,0);
+    controls.update();
+  }
+
+  window.show3DCell = makeCell;
+
+  function resize() {
+    const w = box.clientWidth;
+    const h = box.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w,h,false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  makeCell('plant');
+  loading.remove();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene,camera);
+  }
+  animate();
+}
+</script>
+
 </body>
           </html>
