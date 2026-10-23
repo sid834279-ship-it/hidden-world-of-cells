@@ -1,41 +1,129 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Hidden World of Cells</title>
+
 <style>
 :root {
-  --purple:#7652A6; --lavender:#F5EDFF;
-  --pink:#FCE7F3; --mint:#E3F7EE;
-  --ink:#374151; --green:#28664B;
+  --purple:#7652A6;
+  --lavender:#F5EDFF;
+  --pink:#FCE7F3;
+  --mint:#E3F7EE;
+  --ink:#374151;
+  --green:#28664B;
 }
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#FCFAFF;color:var(--ink);line-height:1.65}
-header{background:linear-gradient(135deg,#F5EDFF,#FCE7F3,#E3F7EE);padding:36px 18px;text-align:center}
-h1{color:var(--purple);font-size:clamp(30px,7vw,48px);line-height:1.15}
-h2{color:var(--purple)}
-header p{font-size:18px}
-nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:12px;background:white;position:sticky;top:0;box-shadow:0 2px 8px #ddd;z-index:2}
-button,.navbtn{border:0;border-radius:12px;padding:11px 15px;background:var(--purple);color:white;cursor:pointer;font-size:15px}
-nav button{background:var(--lavender);color:var(--purple)}
-main{max-width:960px;margin:auto;padding:18px}
-section{scroll-margin-top:90px;margin:22px 0;padding:22px;background:white;border-radius:20px;box-shadow:0 4px 18px #39206012}
-.hero{text-align:center;background:var(--lavender)}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-.card{padding:16px;border-radius:16px;background:var(--mint)}
-.card:nth-child(even){background:var(--pink)}
-.diagram{width:100%;max-width:400px;display:block;margin:auto}
-.part{padding:12px;margin:8px 0;border-radius:12px;background:#F7F3FF}
-.part strong{color:var(--purple)}
-.small{font-size:14px;color:#596273}
-.question{padding:15px;background:#FAF7FF;border-radius:14px;margin:14px 0}
-label{display:block;margin:7px 0;cursor:pointer}
-input[type=radio]{margin-right:7px}
-#result{padding:15px;background:var(--mint);border-radius:12px;margin-top:15px}
-footer{text-align:center;padding:25px;background:var(--lavender)}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#FCFAFF;
+  color:var(--ink);
+  line-height:1.65;
+}
+header {
+  background:linear-gradient(135deg,#F5EDFF,#FCE7F3,#E3F7EE);
+  padding:36px 18px;
+  text-align:center;
+}
+h1 {
+  color:var(--purple);
+  font-size:clamp(30px,7vw,48px);
+  line-height:1.15;
+}
+h2 { color:var(--purple); }
+header p { font-size:18px; }
+nav {
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+  padding:12px;
+  background:white;
+  position:sticky;
+  top:0;
+  box-shadow:0 2px 8px #ddd;
+  z-index:5;
+}
+button {
+  border:0;
+  border-radius:12px;
+  padding:11px 15px;
+  background:var(--purple);
+  color:white;
+  cursor:pointer;
+  font-size:15px;
+  margin:3px;
+}
+button:hover { filter:brightness(1.08); }
+button:focus-visible {
+  outline:3px solid #e9b7e0;
+  outline-offset:3px;
+}
+nav button {
+  background:var(--lavender);
+  color:var(--purple);
+}
+main { max-width:960px; margin:auto; padding:18px; }
+section {
+  scroll-margin-top:90px;
+  margin:22px 0;
+  padding:22px;
+  background:white;
+  border-radius:20px;
+  box-shadow:0 4px 18px #39206012;
+}
+.hero { text-align:center; background:var(--lavender); }
+.cards {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));
+  gap:15px;
+}
+.card { padding:16px; border-radius:16px; background:var(--mint); }
+.card:nth-child(even) { background:var(--pink); }
+.diagram { width:100%; max-width:400px; display:block; margin:auto; }
+.part { padding:12px; margin:8px 0; border-radius:12px; background:#F7F3FF; }
+.part strong { color:var(--purple); }
+.small { font-size:14px; color:#596273; }
+.question { padding:15px; background:#FAF7FF; border-radius:14px; margin:14px 0; }
+.question label { display:block; margin:7px 0; cursor:pointer; }
+input[type=radio] { margin-right:7px; }
+#result { padding:15px; background:var(--mint); border-radius:12px; margin-top:15px; }
+footer { text-align:center; padding:25px; background:var(--lavender); }
+
+#cell3d-section {
+  background:#22213e;
+  color:white;
+  text-align:center;
+}
+#cell3d-section h2 { color:#e4c9ff; }
+#cell3d-viewer {
+  width:100%;
+  height:clamp(320px,65vw,480px);
+  overflow:hidden;
+  border-radius:14px;
+  background:#22213e;
+  touch-action:pan-y;
+}
+#cell3d-viewer canvas { display:block; }
+#cell3d-label { font-weight:bold; margin:12px 0; }
+#cell3d-loading { padding:12px; }
+#cell3d-section .small { color:#ded8ef; }
+.cell-controls { display:flex; justify-content:center; flex-wrap:wrap; gap:6px; }
+.label-toggle { display:inline-flex; align-items:center; gap:8px; margin:12px; }
+.label-toggle input { width:18px; height:18px; }
+@media(max-width:480px) {
+  main { padding:10px; }
+  section { padding:15px; }
+  nav { gap:4px; }
+  nav button { padding:9px 11px; font-size:14px; }
+}
 </style>
 </head>
+
 <body>
 <header>
   <p>CLASS 11 BIOLOGY • CELL BIOLOGY</p>
@@ -44,12 +132,13 @@ footer{text-align:center;padding:25px;background:var(--lavender)}
   <p>Discover cells, explore organelles and test your knowledge.</p>
 </header>
 
-<nav>
+<nav aria-label="Main navigation">
   <button onclick="go('home')">Home</button>
   <button onclick="go('cells')">Explore Cells</button>
   <button onclick="go('organelles')">Organelles</button>
   <button onclick="go('quiz')">Biology Quiz</button>
   <button onclick="go('scores')">My Scores</button>
+  <button onclick="go('cell3d-section')">3D Cells</button>
 </nav>
 
 <main>
@@ -57,8 +146,14 @@ footer{text-align:center;padding:25px;background:var(--lavender)}
   <h2>Welcome to the World of Cells!</h2>
   <p>A cell is the basic structural and functional unit of life. Every living organism is made of one or more cells. Each cell contains structures that perform special jobs.</p>
   <div class="cards">
-    <div class="card"><h3>🌿 Plant Cells</h3><p>Discover cell walls, chloroplasts and the large central vacuole.</p></div>
-    <div class="card"><h3>🐾 Animal Cells</h3><p>Explore nuclei, mitochondria and other important organelles.</p></div>
+    <div class="card">
+      <h3>🌿 Plant Cells</h3>
+      <p>Discover cell walls, chloroplasts and the large central vacuole.</p>
+    </div>
+    <div class="card">
+      <h3>🐾 Animal Cells</h3>
+      <p>Explore nuclei, mitochondria and other important organelles.</p>
+    </div>
   </div>
   <p><button onclick="go('cells')">Start Exploring →</button></p>
 </section>
@@ -69,7 +164,7 @@ footer{text-align:center;padding:25px;background:var(--lavender)}
   <div class="cards">
     <div class="card">
       <h3>🌿 Plant Cell</h3>
-      <svg class="diagram" viewBox="0 0 320 250" role="img" aria-label="Illustration of a plant cell">
+      <svg class="diagram" viewBox="0 0 320 250" role="img" aria-label="Simplified plant cell illustration">
         <rect x="20" y="20" width="280" height="210" rx="28" fill="#91D5A9" stroke="#28664B" stroke-width="5"/>
         <rect x="32" y="32" width="256" height="186" rx="22" fill="#E3F7EE" stroke="#75B9A1" stroke-width="3"/>
         <rect x="92" y="75" width="125" height="115" rx="22" fill="#B7E9F6" stroke="#579CB0" stroke-width="3"/>
@@ -88,7 +183,7 @@ footer{text-align:center;padding:25px;background:var(--lavender)}
     </div>
     <div class="card">
       <h3>🐾 Animal Cell</h3>
-      <svg class="diagram" viewBox="0 0 320 250" role="img" aria-label="Illustration of an animal cell">
+      <svg class="diagram" viewBox="0 0 320 250" role="img" aria-label="Simplified animal cell illustration">
         <path d="M160 22 C230 15 290 68 287 130 C284 192 228 223 160 218 C91 226 32 184 32 122 C31 64 90 24 160 22Z" fill="#F8C9E0" stroke="#B65B94" stroke-width="4"/>
         <path d="M160 35 C220 30 274 75 274 128 C270 181 220 208 160 205 C100 213 46 176 45 122 C46 73 100 35 160 35Z" fill="#FFF0F7"/>
         <circle cx="128" cy="111" r="34" fill="#C6A6F5" stroke="#7652A6" stroke-width="3"/>
@@ -108,14 +203,14 @@ footer{text-align:center;padding:25px;background:var(--lavender)}
       <p><strong>Special features:</strong> No cell wall or chloroplasts. Its shape is often more flexible.</p>
     </div>
   </div>
-  <p class="small">These are simplified illustrations, not detailed textbook diagrams. Use labelled diagrams for studying exact organelle positions.</p>
+  <p class="small">These are simplified illustrations, not detailed textbook diagrams.</p>
 </section>
 
 <section id="organelles">
   <h2>Meet the Cell Organelles</h2>
   <p>Organelles are specialised structures that perform different functions inside cells.</p>
   <div class="cards">
-    <div class="part"><strong>Nucleus</strong><br>Contains DNA and helps control cell activities.</div>
+    <div class="part"><strong>Nucleus</strong><br>Contains DNA and helps regulate cell activities.</div>
     <div class="part"><strong>Mitochondria</strong><br>Release usable energy through cellular respiration.</div>
     <div class="part"><strong>Ribosomes</strong><br>Make proteins.</div>
     <div class="part"><strong>Cell Membrane</strong><br>Controls what enters and leaves the cell.</div>
@@ -137,7 +232,7 @@ footer{text-align:center;padding:25px;background:var(--lavender)}
     <div id="questions"></div>
     <button type="submit">Submit My Answers</button>
   </form>
-  <div id="result" hidden></div>
+  <div id="result" hidden aria-live="polite"></div>
 </section>
 
 <section id="scores">
@@ -147,12 +242,34 @@ footer{text-align:center;padding:25px;background:var(--lavender)}
   <button onclick="clearScores()">Clear Saved Scores</button>
   <p class="small">Scores saved here are not automatically shared with your teacher or synced to other devices.</p>
 </section>
+
+<section id="cell3d-section">
+  <h2>Explore Cells in 3D 🔬</h2>
+  <p>Drag to rotate. Pinch or scroll to zoom.</p>
+  <div id="cell3d-label">Preparing 3D model...</div>
+  <div id="cell3d-loading">Loading 3D model...</div>
+  <div id="cell3d-viewer" aria-label="Interactive 3D cell model"></div>
+  <div class="cell-controls">
+    <button onclick="show3DCell('plant')">🌿 Plant Cell</button>
+    <button onclick="show3DCell('animal')">🐾 Animal Cell</button>
+  </div>
+  <label class="label-toggle">
+    <input id="showLabels" type="checkbox" checked onchange="toggleCellLabels()">
+    Show organelle labels
+  </label>
+  <p class="small">Educational 3D illustration. Organelles and their positions are simplified and not to scale.</p>
+</section>
 </main>
 
 <footer>
   <strong>The Hidden World of Cells</strong>
   <p>Class 11 Biology Learning Project</p>
   <p>Learn • Explore • Discover</p>
+  <hr>
+  <h3>Created By: Mohd Sadiq</h3>
+  <p>Class: 11th A</p>
+  <p>School: GBSSS Tukhmirpur No. 1</p>
+  <p>The Hidden World of Cells | Biology Project</p>
 </footer>
 
 <script>
@@ -168,260 +285,321 @@ const questions = [
  {q:"What is the jelly-like material containing organelles?",a:["Cell wall","Cytoplasm","DNA","Chlorophyll"],c:1},
  {q:"Which statement about plant cells is correct?",a:["They never have mitochondria","They have no cell membrane","They can contain chloroplasts","They have no nucleus"],c:2}
 ];
-const qBox=document.getElementById("questions");
-questions.forEach((q,i)=>{
- const box=document.createElement("div");
- box.className="question";
- const title=document.createElement("strong");
- title.textContent=(i+1)+". "+q.q;
- box.appendChild(title);
- q.a.forEach((a,j)=>{
-  const label=document.createElement("label");
-  const input=document.createElement("input");
-  input.type="radio"; input.name="q"+i; input.value=j; input.required=true;
-  label.appendChild(input); label.appendChild(document.createTextNode(a));
-  box.appendChild(label);
- });
- qBox.appendChild(box);
+
+const qBox = document.getElementById("questions");
+
+questions.forEach((q,i) => {
+  const box = document.createElement("div");
+  box.className = "question";
+
+  const title = document.createElement("strong");
+  title.textContent = (i+1) + ". " + q.q;
+  box.appendChild(title);
+
+  q.a.forEach((answer,j) => {
+    const lab = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "q" + i;
+    input.value = j;
+    input.required = true;
+    lab.appendChild(input);
+    lab.appendChild(document.createTextNode(answer));
+    box.appendChild(lab);
+  });
+
+  qBox.appendChild(box);
 });
-document.getElementById("quizForm").addEventListener("submit",e=>{
- e.preventDefault();
- let score=0;
- questions.forEach((q,i)=>{
-  const selected=document.querySelector('input[name="q'+i+'"]:checked');
-  if(selected && Number(selected.value)===q.c)score++;
- });
- const record={score,total:questions.length,date:new Date().toLocaleString()};
- let history=[];
- try{history=JSON.parse(localStorage.getItem("cellQuizScores")||"[]")}catch(e){}
- history.unshift(record);
- history=history.slice(0,20);
- try{localStorage.setItem("cellQuizScores",JSON.stringify(history))}catch(e){}
- const result=document.getElementById("result");
- result.hidden=false;
- result.textContent="You scored "+score+" out of "+questions.length+". "+
- (score>=8?"Excellent work!":score>=5?"Good effort! Review the organelles and try again.":"Keep learning! Review the notes and try again.");
- showScores();
- result.scrollIntoView({behavior:"smooth",block:"center"});
+
+document.getElementById("quizForm").addEventListener("submit", e => {
+  e.preventDefault();
+  let score = 0;
+
+  questions.forEach((q,i) => {
+    const selected = document.querySelector('input[name="q' + i + '"]:checked');
+    if (selected && Number(selected.value) === q.c) score++;
+  });
+
+  const record = {
+    score,
+    total:questions.length,
+    date:new Date().toLocaleString()
+  };
+
+  let history = [];
+  try {
+    history = JSON.parse(localStorage.getItem("cellQuizScores") || "[]");
+    if (!Array.isArray(history)) history = [];
+  } catch (err) {
+    history = [];
+  }
+
+  history.unshift(record);
+  history = history.slice(0,20);
+
+  try {
+    localStorage.setItem("cellQuizScores",JSON.stringify(history));
+  } catch (err) {
+    // The quiz still works if browser storage is unavailable.
+  }
+
+  const result = document.getElementById("result");
+  result.hidden = false;
+  result.textContent = "You scored " + score + " out of " + questions.length + ". " +
+    (score >= 8 ? "Excellent work!" :
+    score >= 5 ? "Good effort! Review the organelles and try again." :
+    "Keep learning! Review the notes and try again.");
+
+  showScores();
+  result.scrollIntoView({behavior:"smooth",block:"center"});
 });
-function showScores(){
- let history=[];
- try{history=JSON.parse(localStorage.getItem("cellQuizScores")||"[]")}catch(e){}
- const list=document.getElementById("scoreList");
- list.replaceChildren();
- if(!history.length){list.textContent="No scores saved yet. Take the quiz to begin!";return}
- history.forEach(r=>{
-  const p=document.createElement("p");
-  p.className="part";
-  p.textContent=r.date+" — Score: "+r.score+"/"+r.total;
-  list.appendChild(p);
- });
+
+function showScores() {
+  let history = [];
+  try {
+    history = JSON.parse(localStorage.getItem("cellQuizScores") || "[]");
+    if (!Array.isArray(history)) history = [];
+  } catch (err) {
+    history = [];
+  }
+
+  const list = document.getElementById("scoreList");
+  list.replaceChildren();
+
+  if (!history.length) {
+    list.textContent = "No scores saved yet. Take the quiz to begin!";
+    return;
+  }
+
+  history.forEach(r => {
+    const p = document.createElement("p");
+    p.className = "part";
+    p.textContent = r.date + " — Score: " + r.score + "/" + r.total;
+    list.appendChild(p);
+  });
 }
-function clearScores(){
- if(confirm("Clear all saved quiz scores on this device?")){
-  localStorage.removeItem("cellQuizScores");showScores();
- }
-}
-function go(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
-showScores();
-</script>
-<footer style="text-align:center; padding:24px; background:#F5EDFF; color:#7652A6;">
-  <h3>Created By: Mohd Sadiq</h3>
-  <p>Class: 11th A</p>
-  <p>School: GBSSS Tukhmirpur No. 1</p>
-  <p>The Hidden World of Cells | Biology Project</p>
-</footer>
 
-<section style="padding:20px; text-align:center; background:#22213e; color:white;">
-  <h2>Explore Cells in 3D 🔬</h2>
-  <p>Drag to rotate the model.</p>
-
-  <div id="cell3d-label">3D Cell Model</div>
-
-  <div id="cell3d-loading">Loading 3D model...</div>
-
-  <div id="cell3d-viewer"
-       style="width:100%; height:400px; overflow:hidden; border-radius:12px;">
-  </div>
-
-  <button onclick="show3DCell('plant')">🌿 Plant Cell</button>
-  <button onclick="show3DCell('animal')">🐾 Animal Cell</button>
-</section>
-
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+function clearScores() {
+  if (confirm("Clear all saved quiz scores on this device?")) {
+    try {
+      localStorage.removeItem("cellQuizScores");
+    } catch (err) {}
+    showScores();
   }
 }
+
+function go(id) {
+  document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+showScores();
 </script>
 
 <script type="module">
-import * as THREE from 'three';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
 
-const box = document.getElementById('cell3d-viewer');
-const loading = document.getElementById('cell3d-loading');
-const label = document.getElementById('cell3d-label');
+const box = document.getElementById("cell3d-viewer");
+const loading = document.getElementById("cell3d-loading");
+const cellTitle = document.getElementById("cell3d-label");
+const labelToggle = document.getElementById("showLabels");
 
-if (box && loading && label) {
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#22213e');
+let scene, camera, renderer, controls;
+let cellGroup, labelGroup;
+let animationId = 0;
+let currentType = "plant";
 
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-  camera.position.set(5, 4, 7);
+function disposeGroup(root) {
+  if (!root) return;
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.domElement.style.width = '100%';
-  renderer.domElement.style.height = '100%';
-  renderer.domElement.style.display = 'block';
-  box.appendChild(renderer.domElement);
+  const geometries = new Set();
+  const materials = new Set();
+  const textures = new Set();
 
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.minDistance = 4;
-  controls.maxDistance = 12;
+  root.traverse(obj => {
+    if (obj.geometry) geometries.add(obj.geometry);
 
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x454060, 2));
-  const light = new THREE.DirectionalLight(0xffffff, 3);
-  light.position.set(5, 8, 6);
-  scene.add(light);
+    const mats = Array.isArray(obj.material)
+      ? obj.material
+      : obj.material ? [obj.material] : [];
 
-  const group = new THREE.Group();
-const organelleLabels = [];
-
-function addOrganelleLabel(name, position) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 256;
-  canvas.height = 64;
-
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 26px Arial';
-  ctx.textAlign = 'center';
-  ctx.fillText(name, 128, 42);
-
-  const texture = new THREE.CanvasTexture(canvas);
-  const material = new THREE.SpriteMaterial({
-    map: texture,
-    transparent: true,
-    depthTest: false
+    mats.forEach(mat => {
+      materials.add(mat);
+      if (mat.map) textures.add(mat.map);
+      if (mat.alphaMap) textures.add(mat.alphaMap);
+    });
   });
 
-  const sprite = new THREE.Sprite(material);
-  sprite.position.set(...position);
-  sprite.scale.set(1.5, 0.38, 1);
-  sprite.userData.organelleName = name;
+  while (root.children.length) {
+    root.remove(root.children[0]);
+  }
 
-  group.add(sprite);
-  organelleLabels.push(sprite);
+  geometries.forEach(g => g.dispose());
+  textures.forEach(t => t.dispose());
+  materials.forEach(m => m.dispose());
 }
-group.renderOrder = 1;
-  scene.add(group);
 
-  function sphere(name, color, pos, scale, transparent = false, opacity = 1) {
-    const mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 32, 24),
-      new THREE.MeshPhysicalMaterial({
+function makeLabel(name, x, y, z) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 128;
+
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "rgba(25, 20, 47, 0.88)";
+  ctx.beginPath();
+  ctx.roundRect(8, 8, 496, 112, 24);
+  ctx.fill();
+
+  ctx.strokeStyle = "#d8b9ff";
+  ctx.lineWidth = 4;
+  ctx.stroke();
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 34px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(name, 256, 64, 470);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  const mat = new THREE.SpriteMaterial({
+    map:texture,
+    transparent:true,
+    depthTest:false,
+    sizeAttenuation:true
+  });
+
+  const sprite = new THREE.Sprite(mat);
+  sprite.position.set(x,y,z);
+  sprite.scale.set(1.15,0.29,1);
+  sprite.renderOrder = 10;
+  labelGroup.add(sprite);
+}
+
+function buildCell(type) {
+  if (!cellGroup || !labelGroup) return;
+
+  disposeGroup(cellGroup);
+  disposeGroup(labelGroup);
+
+  cellGroup.rotation.set(0,0,0);
+  currentType = type;
+
+  const isPlant = type === "plant";
+  const geometryCache = new Map();
+  const materialCache = new Map();
+
+  function material(color, extra = {}) {
+    const key = String(color) + JSON.stringify(extra);
+
+    if (!materialCache.has(key)) {
+      materialCache.set(key,new THREE.MeshPhongMaterial({
         color,
-        roughness: 0.36,
-        transparent,
-        opacity,
-        side: THREE.DoubleSide
-      })
+        shininess:42,
+        specular:0x51445f,
+        ...extra
+      }));
+    }
+
+    return materialCache.get(key);
+  }
+
+  function sphereGeometry(w = 32, h = 20) {
+    const key = "sphere-" + w + "-" + h;
+
+    if (!geometryCache.has(key)) {
+      geometryCache.set(key,new THREE.SphereGeometry(1,w,h));
+    }
+
+    return geometryCache.get(key);
+  }
+
+  function mesh(geometry,color,position,extra = {}) {
+    const obj = new THREE.Mesh(geometry,material(color,extra));
+    obj.position.set(...position);
+    cellGroup.add(obj);
+    return obj;
+  }
+
+  function ellipsoid(x,y,z,sx,sy,sz,color,extra = {}) {
+    const obj = mesh(
+      sphereGeometry(),
+      color,
+      [x,y,z],
+      extra
     );
-    mesh.name = name;
-    mesh.position.set(...pos);
-    mesh.scale.set(...scale);
-    group.add(mesh);
+    obj.scale.set(sx,sy,sz);
+    return obj;
   }
 
-  function makeCell(type) {
-organelleLabels.length = 0;
+  function tube(points,color = 0x8060a5,radius = 0.02) {
+    const curve = new THREE.CatmullRomCurve3(
+      points.map(p => new THREE.Vector3(...p))
+    );
+    const geo = new THREE.TubeGeometry(curve,18,radius,6,false);
+    return mesh(geo,color,[0,0,0]);
+  }
 
-    while (group.children.length) {
-      const obj = group.children[0];
-      group.remove(obj);
-      obj.geometry.dispose();
-      obj.material.dispose();
+  function ring(x,y,z,rx,ry,color,radius = 0.012) {
+    const pts = [];
+    for (let i=0;i<=48;i++) {
+      const a = i/48*Math.PI*2;
+      pts.push([x+Math.cos(a)*rx,y+Math.sin(a)*ry,z]);
+    }
+    tube(pts,color,radius);
+  }
+
+  function label(name,x,y,z) {
+    makeLabel(name,x,y,z);
+  }
+
+  // Ribosomes
+  function ribosome(x,y,z,size = 1) {
+    const obj = mesh(
+      sphereGeometry(12,8),
+      0x60447e,
+      [x,y,z]
+    );
+    obj.scale.setScalar(0.025*size);
+    return obj;
+  }
+
+  // Nucleus, nucleolus, chromatin and nuclear pores
+  function nucleus(x,y,z,s = 1) {
+    ellipsoid(
+      x,y,z,
+      0.57*s,0.48*s,0.39*s,
+      0x8964b8,
+      {side:THREE.DoubleSide}
+    );
+
+    ellipsoid(
+      x-0.015*s,y,z+0.035*s,
+      0.49*s,0.405*s,0.325*s,
+      0xc4a7e9
+    );
+
+    ellipsoid(
+      x+0.12*s,y-0.055*s,z+0.25*s,
+      0.14*s,0.13*s,0.10*s,
+      0x714494
+    );
+
+    for (let i=0;i<7;i++) {
+      const a = i*1.73;
+      tube([
+        [x-0.29*s,y+Math.sin(a)*0.11*s,z+0.16*s],
+        [x-0.12*s,y+Math.cos(a)*0.12*s,z+0.19*s],
+        [x+0.04*s,y-Math.sin(a)*0.10*s,z+0.20*s],
+        [x+0.26*s,y+Math.cos(a)*0.09*s,z+0.12*s]
+      ],0x8054a7,0.008*s);
     }
 
-    if (type === 'plant') {
-      sphere('Cell wall', '#57b66b', [0,0,0], [2.1,1.65,1.7], true, 0.18);
-      sphere('Cell membrane', '#b8f2ce', [0,0,0], [1.96,1.51,1.56], true, 0.55);
-      sphere('Cytoplasm', '#e1f8df', [0,0,0], [1.82,1.38,1.43], true, 0.45);
-      sphere('Central vacuole', '#66c9ef', [-0.15,0,0], [1.05,0.95,0.9], true, 0.8);
-      sphere('Nucleus', '#a875df', [1.05,0.65,0.55], [0.48,0.46,0.46]);
-      sphere('Nucleolus', '#65409d', [1.15,0.7,0.87], [0.18,0.18,0.15]);
-
-      [[-1,0.8,0.6],[-1,-0.7,0.6],[-0.7,0.6,-0.9],
-       [0.7,-0.8,-0.7],[0.8,0.9,-0.6],[1.25,-0.4,0.4]]
-        .forEach(p => sphere('Chloroplast','#27965c',p,[0.32,0.18,0.23]));
-
-      [[-0.9,0.3,1],[0.2,-0.9,0.9],[0.5,0.7,-1.0]]
-        .forEach(p => sphere('Mitochondrion','#e98b50',p,[0.3,0.15,0.16]));
-
-addOrganelleLabel('Nucleus', [1.05, 1.15, 0.55]);
-addOrganelleLabel('Vacuole', [-0.15, 1.15, 0]);
-addOrganelleLabel('Chloroplast', [-1, 1.05, 0.6]);
-addOrganelleLabel('Mitochondrion', [0.5, 1.05, -1]);
-
-      label.textContent = '🌿 Plant Cell — simplified 3D model';
-    } else {
-      sphere('Cell membrane','#df75ad',[0,0,0],[1.85,1.55,1.65],true,0.25);
-      sphere('Cytoplasm','#ffcce6',[0,0,0],[1.72,1.43,1.53],true,0.42);
-      sphere('Nucleus','#a875df',[-0.4,0.35,0.25],[0.65,0.65,0.62]);
-      sphere('Nucleolus','#65409d',[-0.28,0.42,0.68],[0.22,0.22,0.2]);
-
-      [[0.7,0.7,0.5],[0.8,-0.5,0.6],[-0.9,-0.6,0.3],
-       [0.7,0.3,-0.9],[-0.8,0.7,-0.8]]
-        .forEach(p => sphere('Mitochondrion','#e98b50',p,[0.36,0.2,0.22]));
-
-      [[-1,0,0.8],[0.1,-0.8,-0.9],[1.1,0.3,0.1]]
-        .forEach(p => sphere('Small vesicle','#72c9e8',p,[0.2,0.2,0.2]));
-
-      sphere('Centrosome','#e7c44b',[0.1,-0.2,0.9],[0.16,0.16,0.16]);
-
-addOrganelleLabel('Nucleus', [0.7, 1.0, 0.4]);
-addOrganelleLabel('Mitochondrion', [-0.8, 0.5, 0.7]);
-addOrganelleLabel('Lysosome', [0.3, -0.8, 0.8]);
-addOrganelleLabel('Cell Membrane', [1.5, 0.9, 0]);
-
-      label.textContent = '🐾 Animal Cell — simplified 3D model';
-    }
-
-    controls.reset();
-    camera.position.set(5,4,7);
-    controls.target.set(0,0,0);
-    controls.update();
-  }
-
-  window.show3DCell = makeCell;
-
-  function resize() {
-    const w = box.clientWidth;
-    const h = box.clientHeight;
-    if (!w || !h) return;
-    renderer.setSize(w,h,false);
-    camera.aspect = w/h;
-    camera.updateProjectionMatrix();
-  }
-
-  window.addEventListener('resize', resize);
-  resize();
-  makeCell('plant');
-  loading.remove();
-
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene,camera);
-  }
-  animate();
-}
-</script>
-
-</body>
-          </html>
+    for (let i=0;i<12;i++) {
+      const a = i*Math.PI*2/12;
+      ellipsoid(
+        x+Math.cos(a)*0.46*s,
+        y+Math.sin(a)*0.36*s,
+        z+0.20*s,
+        0.022*s,0.022*s,0.015*s,
+        0x68418f
+   
