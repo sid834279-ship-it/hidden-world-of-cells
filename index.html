@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -602,4 +601,355 @@ function buildCell(type) {
         z+0.20*s,
         0.022*s,0.022*s,0.015*s,
         0x68418f
-   
+      );
+    }
+  }
+
+  // Mitochondria with inner membrane folds
+  function mitochondrion(x,y,z,s = 1) {
+    ellipsoid(x,y,z,0.43*s,0.23*s,0.18*s,0xb95665);
+    ellipsoid(x,y,z+0.025*s,0.35*s,0.16*s,0.13*s,0xf1a17f);
+
+    for (let i=-2;i<=2;i++) {
+      const xx = x+i*0.105*s;
+      tube([
+        [xx-0.025*s,y-0.10*s,z+0.10*s],
+        [xx+0.025*s,y-0.04*s,z+0.13*s],
+        [xx-0.025*s,y+0.02*s,z+0.13*s],
+        [xx+0.025*s,y+0.085*s,z+0.095*s]
+      ],0x963d50,0.011*s);
+    }
+
+    // Stylized mitochondrial DNA
+    tube([
+      [x-0.16*s,y,z+0.145*s],
+      [x-0.08*s,y+0.055*s,z+0.15*s],
+      [x+0.06*s,y+0.045*s,z+0.15*s],
+      [x+0.16*s,y-0.015*s,z+0.14*s],
+      [x+0.08*s,y-0.065*s,z+0.15*s],
+      [x-0.08*s,y-0.05*s,z+0.15*s]
+    ],0x71394b,0.008*s);
+  }
+
+  // Chloroplasts with thylakoid stacks
+  function chloroplast(x,y,z,s = 1) {
+    ellipsoid(x,y,z,0.36*s,0.22*s,0.17*s,0x23794b);
+    ellipsoid(x,y,z+0.02*s,0.305*s,0.17*s,0.13*s,0x75c77e);
+
+    for (let g=-1;g<=1;g++) {
+      for (let d=-2;d<=2;d++) {
+        ellipsoid(
+          x+g*0.14*s,
+          y+d*0.025*s,
+          z+0.13*s,
+          0.047*s,0.015*s,0.012*s,
+          0x155e3a
+        );
+      }
+    }
+
+    for (let g=-1;g<1;g++) {
+      tube([
+        [x+g*0.14*s+0.03*s,y,z+0.125*s],
+        [x+g*0.14*s+0.07*s,y+0.025*s,z+0.14*s],
+        [x+g*0.14*s+0.11*s,y,z+0.125*s]
+      ],0x226b42,0.008*s);
+    }
+
+    for (let i=0;i<4;i++) {
+      ellipsoid(
+        x+(i-1.5)*0.07*s,
+        y+(i%2 ? 0.045 : -0.04)*s,
+        z+0.145*s,
+        0.012*s,0.012*s,0.009*s,
+        0x174f35
+      );
+    }
+  }
+
+  // Golgi apparatus and transport vesicles
+  function golgi(x,y,z,s = 1) {
+    for (let i=0;i<5;i++) {
+      const yy = y+(i-2)*0.09*s;
+      const pts = [];
+
+      for (let j=0;j<=10;j++) {
+        const t = j/10;
+        pts.push([
+          x+(t-0.5)*0.76*s,
+          yy+Math.sin(t*Math.PI)*0.055*s,
+          z+(i%2)*0.018*s
+        ]);
+      }
+
+      tube(pts,i%2 ? 0xd87ba9 : 0xf0a3c7,0.022*s);
+    }
+
+    for (let i=0;i<6;i++) {
+      const a = i*Math.PI/3;
+      ellipsoid(
+        x+Math.cos(a)*0.43*s,
+        y+Math.sin(a)*0.22*s,
+        z+0.06*s,
+        0.035*s,0.035*s,0.035*s,
+        0xf1b4d1
+      );
+    }
+  }
+
+  // Rough and smooth endoplasmic reticulum
+  function endoplasmicReticulum(x,y,z,color,rough = false) {
+    for (let i=0;i<5;i++) {
+      const yy = y-i*0.10;
+      const pts = [
+        [x-0.45,yy,z],
+        [x-0.28,yy+0.055,z+0.025],
+        [x-0.08,yy+0.015,z+0.04],
+        [x+0.12,yy-0.025,z+0.035],
+        [x+0.30,yy+0.045,z+0.02],
+        [x+0.44,yy,z]
+      ];
+
+      tube(pts,color,0.018);
+
+      if (rough) {
+        for (let j=1;j<pts.length-1;j++) {
+          const [px,py,pz] = pts[j];
+          ribosome(px,py+0.025,pz+0.025,0.8);
+        }
+      }
+    }
+  }
+
+  function lysosome(x,y,z,s = 1) {
+    ellipsoid(x,y,z,0.13*s,0.13*s,0.12*s,0xd58a43);
+    ellipsoid(x,y,z+0.025*s,0.085*s,0.085*s,0.075*s,0xf1c06d);
+
+    for (let i=0;i<5;i++) {
+      const a = i*2.4;
+      ellipsoid(
+        x+Math.cos(a)*0.04*s,
+        y+Math.sin(a)*0.04*s,
+        z+0.07*s,
+        0.012*s,0.012*s,0.012*s,
+        0xa4693e
+      );
+    }
+  }
+
+  function boxBoundary(w,h,d,color,opacity) {
+    const geo = new THREE.BoxGeometry(w,h,d);
+
+    mesh(geo,color,[0,0,0],{
+      transparent:true,
+      opacity,
+      depthWrite:false,
+      side:THREE.DoubleSide
+    });
+
+    const edgeGeo = new THREE.EdgesGeometry(geo);
+    const edgeMat = new THREE.LineBasicMaterial({
+      color,
+      transparent:true,
+      opacity:0.85
+    });
+
+    cellGroup.add(new THREE.LineSegments(edgeGeo,edgeMat));
+  }
+
+  if (isPlant) {
+    // Plant cell wall and inner membrane boundary
+    boxBoundary(4.5,3.15,1.8,0x62b985,0.14);
+    boxBoundary(4.36,3.01,1.66,0x49aa82,0.07);
+
+    // Central vacuole and tonoplast illustration
+    ellipsoid(
+      0.15,-0.05,-0.03,
+      1.34,1.00,0.55,
+      0x8fd5f3,
+      {transparent:true,opacity:0.30,depthWrite:false}
+    );
+    ring(0.15,-0.05,0.42,1.34,1.00,0x42a7d0);
+
+    nucleus(-1.30,0.70,0.30,0.82);
+
+    chloroplast(-1.58,-0.75,0.35,0.9);
+    chloroplast(1.55,0.90,0.35,0.9);
+    chloroplast(1.55,-0.86,0.35,0.9);
+    chloroplast(-1.55,0.02,0.35,0.9);
+    chloroplast(0.95,1.10,0.30,0.75);
+
+    mitochondrion(-0.25,1.00,0.45,0.65);
+    mitochondrion(1.20,-0.25,0.35,0.65);
+
+    endoplasmicReticulum(-0.95,0.20,0.48,0x8162b4,true);
+    endoplasmicReticulum(-0.75,-0.30,0.45,0x9c82bd,false);
+    golgi(0.82,0.22,0.48,0.9);
+
+    for (let i=0;i<18;i++) {
+      const a = i*2.4;
+      ribosome(Math.cos(a)*1.70,Math.sin(a)*1.05,0.52,0.8);
+    }
+
+    label("Cell wall",0,1.78,0.1);
+    label("Plasma membrane",1.4,1.48,0.4);
+    label("Nucleus",-1.35,1.40,0.7);
+    label("Central vacuole",0.15,-1.18,0.65);
+    label("Chloroplast",1.55,1.30,0.65);
+    label("Mitochondrion",-0.25,1.35,0.7);
+    label("Golgi apparatus",0.85,0.63,0.8);
+    label("Rough ER",-1.15,-0.55,0.8);
+
+    cellTitle.textContent = "🌿 Plant Cell — detailed 3D illustration";
+  } else {
+    // Animal cell membrane and cytoplasm
+    ellipsoid(
+      0,0,0,
+      2.05,1.43,0.83,
+      0xc45b8d,
+      {transparent:true,opacity:0.25,depthWrite:false,side:THREE.DoubleSide}
+    );
+
+    ellipsoid(
+      0,0,0.01,
+      1.94,1.32,0.75,
+      0xf3c4d9,
+      {transparent:true,opacity:0.16,depthWrite:false}
+    );
+
+    nucleus(-0.60,0.26,0.32);
+
+    mitochondrion(0.95,0.53,0.35,1);
+    mitochondrion(1.02,-0.55,0.30,0.88);
+    mitochondrion(-1.20,-0.55,0.32,0.85);
+
+    golgi(0.72,0.78,0.42,0.9);
+    endoplasmicReticulum(-1.10,0.12,0.40,0x8061b4,true);
+    endoplasmicReticulum(-0.95,-0.38,0.35,0x9c83bb,false);
+
+    for (let i=0;i<28;i++) {
+      const a = i*2.399;
+      const r = 0.50+(i%4)*0.22;
+      ribosome(Math.cos(a)*r,Math.sin(a)*r*0.62,0.48,0.8);
+    }
+
+    lysosome(0.65,-0.93,0.36,1);
+    lysosome(-0.72,-0.83,0.35,0.9);
+    lysosome(1.45,0.02,0.32,0.85);
+
+    // Simplified centrosome with centrioles
+    const centriole1 = ellipsoid(
+      0.12,-0.10,0.40,
+      0.18,0.055,0.055,0xd5a93d
+    );
+    centriole1.rotation.z = 0.6;
+
+    const centriole2 = ellipsoid(
+      0.16,-0.02,0.43,
+      0.18,0.055,0.055,0xf0cf68
+    );
+    centriole2.rotation.z = -0.6;
+
+    label("Nucleus",-0.65,1.05,0.8);
+    label("Mitochondrion",1.18,-1.08,0.75);
+    label("Golgi apparatus",0.88,1.30,0.75);
+    label("Rough ER",-1.35,-1.08,0.75);
+    label("Lysosome",1.47,-0.24,0.7);
+    label("Cell membrane",0,1.68,0.1);
+    label("Centrosome",0.20,-0.38,0.7);
+
+    cellTitle.textContent = "🐾 Animal Cell — detailed 3D illustration";
+  }
+
+  labelGroup.visible = labelToggle.checked;
+
+  camera.position.set(5.8,4.2,7.4);
+  controls.target.set(0,0,0);
+  controls.reset();
+  controls.target.set(0,0,0);
+  controls.update();
+}
+
+function toggleCellLabels() {
+  if (labelGroup) {
+    labelGroup.visible = labelToggle.checked;
+  }
+}
+
+window.toggleCellLabels = toggleCellLabels;
+window.show3DCell = function(type) {
+  if (type !== "plant" && type !== "animal") return;
+  buildCell(type);
+};
+
+if (box) {
+  try {
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color("#22213e");
+
+    camera = new THREE.PerspectiveCamera(45,1,0.1,100);
+    camera.position.set(5.8,4.2,7.4);
+
+    renderer = new THREE.WebGLRenderer({
+      antialias:true,
+      alpha:false
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1,2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+    renderer.domElement.style.display = "block";
+    box.appendChild(renderer.domElement);
+
+    controls = new OrbitControls(camera,renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.minDistance = 4;
+    controls.maxDistance = 12;
+
+    scene.add(new THREE.HemisphereLight(0xffffff,0x454060,2));
+
+    const light = new THREE.DirectionalLight(0xffffff,3);
+    light.position.set(5,8,6);
+    scene.add(light);
+
+    cellGroup = new THREE.Group();
+    labelGroup = new THREE.Group();
+    scene.add(cellGroup);
+    scene.add(labelGroup);
+
+    function resize() {
+      const w = box.clientWidth;
+      const h = box.clientHeight;
+      if (!w || !h) return;
+
+      renderer.setSize(w,h,false);
+      camera.aspect = w/h;
+      camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener("resize",resize);
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(resize).observe(box);
+    }
+    resize();
+
+    buildCell("plant");
+    loading.hidden = true;
+
+    function animate() {
+      animationId = requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene,camera);
+    }
+    animate();
+  } catch (err) {
+    console.error("3D viewer error:",err);
+    loading.hidden = false;
+    loading.textContent =
+      "The 3D model could not load. Open this page using GitHub Pages and try a modern browser.";
+  }
+}
+</script>
+</body>
+</html>
